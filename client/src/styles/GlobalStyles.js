@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { COLORS } from './colors';
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -13,6 +14,7 @@ const GlobalStyles = createGlobalStyle`
   body{
     margin: 0;
     font-family: sans-serif;
+    background-color: ${COLORS.backgroundColor};
   }
   a{
     text-decoration: none;
