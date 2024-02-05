@@ -1,35 +1,32 @@
 import { useContext, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { URLS } from '../../constants/urls';
 import { UsersContext } from '../../context/UsersContext';
-import { postData } from '../../utils/api/api';
+import { patchData } from '../../utils/api/api';
 import { generateRandomImage } from '../../utils/generateRandomImage';
 
-const FormCreateUser = () => {
-	const [userImage, setUserImage] = useState('/assets/images/profile.png');
-	const { setUsers } = useContext(UsersContext);
+const FormEditUser = () => {
+	const { id } = useParams();
+	const { users } = useContext(UsersContext);
+	const [userImage, setUserImage] = useState('');
+	const currentUser = users.find(user => user._id === id);
+
 	const {
 		handleSubmit,
 		register
 
 		// formState: { errors }
 	} = useForm();
-	const navigate = useNavigate();
 
 	return (
 		<div>
-			<h2>Create User Form</h2>
+			<h2>Edit User Form</h2>
 			<Link to={'/'}>
 				<button type='button'>Home</button>
 			</Link>
 
-			<form
-				onSubmit={handleSubmit(data =>
-					formSubmit(data, userImage, navigate, setUsers)
-				)}
-			>
+			<form onSubmit={handleSubmit(data => formSubmit(data, userImage, id))}>
 				<div>
 					<label htmlFor='name'>Name:</label>
 					<input
@@ -37,6 +34,7 @@ const FormCreateUser = () => {
 						name='name'
 						id='name'
 						{...register('name', { required: true })}
+						defaultValue={currentUser.name}
 					/>
 				</div>
 				<div>
@@ -46,15 +44,7 @@ const FormCreateUser = () => {
 						name='email'
 						id='email'
 						{...register('email', { required: true })}
-					/>
-				</div>
-				<div>
-					<label htmlFor='password'>Password:</label>
-					<input
-						type='text'
-						name='text'
-						id='password'
-						{...register('password', { required: true })}
+						defaultValue={currentUser.email}
 					/>
 				</div>
 				<div>
@@ -64,6 +54,7 @@ const FormCreateUser = () => {
 						name='username'
 						id='username'
 						{...register('username', { required: true })}
+						defaultValue={currentUser.username}
 					/>
 				</div>
 				<label>
@@ -94,31 +85,34 @@ const FormCreateUser = () => {
 							name='isActive'
 							defaultChecked={false}
 							{...register('isActive')}
+							checked={currentUser.active}
+							//! danger
 						/>
 					</label>
 				</div>
-				<button type='submit'>Create User</button>
+				<button type='submit'>Update User</button>
 			</form>
 		</div>
 	);
 };
 
-const createUser = async (data, userImage) => {
+const updateUser = async (data, userImage, id) => {
 	console.log('data', data);
-	const newUser = {
-		password: data.password,
+	const updatedUser = {
+		id,
 		name: data.name,
 		email: data.email,
 		username: data.username,
 		active: data.isActive,
 		image: userImage
 	};
-	console.log('userData', newUser);
-	try {
-		const newUsers = await postData(URLS.API_USERS, newUser);
+	console.log('updatedUser', updatedUser);
 
-		console.log('Usuario creado exitosamente');
-		console.log('newUsers', newUsers);
+	try {
+		const updatedUsers = await patchData(
+			`${URLS.API_USERS}/${id}`,
+			updatedUser
+		);
 	} catch (error) {
 		console.error('Error al crear el usuario:', error);
 	}
@@ -130,11 +124,8 @@ const handleGenerateImage = (gender, setUserImage) => {
 	setUserImage(imageUrl);
 };
 
-const formSubmit = async (data, userImage, navigate, setUsers) => {
-	const user = await createUser(data, userImage);
-
-	setUsers(user);
-	navigate('/');
+const formSubmit = (data, userImage, id) => {
+	updateUser(data, userImage, id);
 };
 
-export default FormCreateUser;
+export default FormEditUser;

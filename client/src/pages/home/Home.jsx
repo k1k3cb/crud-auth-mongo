@@ -1,34 +1,41 @@
+import { useContext } from 'react';
 import UserCard from '../../components/user-card/UserCard';
-import { USERS } from '../../constants/users';
 import { USER_FILTERS } from '../../constants/users-filter';
-import { useFilter } from '../../providers/FIlter.provider';
+import { UsersContext } from '../../context/UsersContext';
+import { FilterContext } from '../../context/filterContext';
 import { StyledContainer } from './styles';
 
 const Home = () => {
-	const { filter } = useFilter();
-	const currentUsers = filterUsers(USERS, filter);
-	console.log('filter', filter);
+	const { filter } = useContext(FilterContext);
+	const { users, loading } = useContext(UsersContext);
+
+	if (loading && !users) return <h2>LOADING...</h2>;
+
+	const currentUsers = filterUsers(users, filter);
 
 	return (
 		<StyledContainer>
-			{currentUsers.map(user => {
-				return (
-					<UserCard
-						key={user.id}
-						id={user.id}
-						image={user.image}
-						name={user.name}
-						nickname={user.nickname}
-						email={user.email}
-						estatus={user.active}
-					/>
-				);
-			})}
+			{currentUsers &&
+				currentUsers.map(user => {
+					console.log(user);
+					return (
+						<UserCard
+							key={user._id}
+							id={user._id}
+							image={user.image}
+							name={user.name}
+							username={user.username}
+							email={user.email}
+							estatus={user.active}
+						/>
+					);
+				})}
 		</StyledContainer>
 	);
 };
 
 const filterUsers = (users, filter) => {
+	// const filteredUsers = [...users];
 	switch (filter) {
 		case USER_FILTERS.ALL:
 			return users;
@@ -36,8 +43,6 @@ const filterUsers = (users, filter) => {
 			return users.filter(user => user.active);
 		case USER_FILTERS.INACTIVE:
 			return users.filter(user => !user.active);
-		default:
-			return users;
 	}
 };
 

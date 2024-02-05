@@ -1,5 +1,5 @@
 export const USER_FILTERS = {
-    ALL: 'All Users',
-    ACTIVE: 'User Active',
-    INACTIVE: 'User Inactive'
+    ALL: 0,
+    ACTIVE: 1,
+    INACTIVE: 2
 };

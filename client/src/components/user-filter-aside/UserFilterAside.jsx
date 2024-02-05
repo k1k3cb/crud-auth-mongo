@@ -1,11 +1,10 @@
+import { useContext } from 'react';
 import { USER_FILTERS } from '../../constants/users-filter';
-import { useFilter } from '../../providers/FIlter.provider';
+import { FilterContext } from '../../context/filterContext';
 import { StyledDiv } from './styles';
-import { useState } from 'react';
 
 const UserFilterAside = () => {
-	const { filter, setFilter } = useFilter();
-
+	const { setFilter } = useContext(FilterContext);
 	return (
 		<StyledDiv>
 			<label>
@@ -14,6 +13,7 @@ const UserFilterAside = () => {
 					name='user-filter'
 					value={USER_FILTERS.ALL}
 					onChange={event => handleByOption(event, setFilter)}
+					defaultChecked
 				/>
 				All Users
 			</label>

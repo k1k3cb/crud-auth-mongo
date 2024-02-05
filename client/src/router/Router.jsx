@@ -1,9 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import FormCreateUser from '../components/form-create-user/FormCreateUser';
-import FormEditUser from '../form-edit-user/FormEditUser';
+
 import Layout from '../layouts/Layout';
 import Home from '../pages/home/Home';
 import UserDetails from '../pages/user-details/UserDetails';
+import FormEditUser from '../components/form-edit-user/FormEditUser';
 
 const Router = () => {
 	return (
