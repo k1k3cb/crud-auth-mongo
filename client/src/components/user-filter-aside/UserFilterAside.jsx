@@ -40,7 +40,7 @@ const UserFilterAside = () => {
 };
 
 const handleByOption = (event, setFilter) => {
-	const selectedValue = event.target.value;
+	const selectedValue = Number(event.target.value);
 	setFilter(selectedValue);
 
 	// console.log(selectedValue)

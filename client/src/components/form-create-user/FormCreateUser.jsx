@@ -116,9 +116,7 @@ const createUser = async (data, userImage) => {
 	console.log('userData', newUser);
 	try {
 		const newUsers = await postData(URLS.API_USERS, newUser);
-
-		console.log('Usuario creado exitosamente');
-		console.log('newUsers', newUsers);
+		return newUsers;
 	} catch (error) {
 		console.error('Error al crear el usuario:', error);
 	}

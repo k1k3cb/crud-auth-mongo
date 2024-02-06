@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import UserCard from '../../components/user-card/UserCard';
 import { USER_FILTERS } from '../../constants/users-filter';
 import { UsersContext } from '../../context/UsersContext';
@@ -8,6 +8,7 @@ import { StyledContainer } from './styles';
 const Home = () => {
 	const { filter } = useContext(FilterContext);
 	const { users, loading } = useContext(UsersContext);
+
 
 	if (loading && !users) return <h2>LOADING...</h2>;
 
@@ -35,14 +36,14 @@ const Home = () => {
 };
 
 const filterUsers = (users, filter) => {
-	// const filteredUsers = [...users];
+	const filteredUsers = [...users];
 	switch (filter) {
 		case USER_FILTERS.ALL:
-			return users;
+			return filteredUsers;
 		case USER_FILTERS.ACTIVE:
-			return users.filter(user => user.active);
+			return filteredUsers.filter(user => user.active);
 		case USER_FILTERS.INACTIVE:
-			return users.filter(user => !user.active);
+			return filteredUsers.filter(user => !user.active);
 	}
 };
 
