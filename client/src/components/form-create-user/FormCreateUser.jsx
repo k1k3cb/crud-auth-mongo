@@ -2,15 +2,12 @@ import { useContext, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { URLS } from '../../constants/urls';
 import { UsersContext } from '../../context/UsersContext';
-import { postData } from '../../utils/api/api';
 import { registerRequest } from '../../utils/api/auth.api';
-import { generateRandomImage } from '../../utils/generateRandomImage';
-import { StyledImg } from './styles';
+import InputFile from '../input-file/InputFile';
 
 const FormCreateUser = () => {
-	const [userImage, setUserImage] = useState('/assets/images/profile.png');
+	const [userImage, setUserImage] = useState('');
 	const { setUsers } = useContext(UsersContext);
 	const {
 		handleSubmit,
@@ -65,26 +62,8 @@ const FormCreateUser = () => {
 						{...register('username', { required: true })}
 					/>
 				</div>
-				<label>
-					<input
-						type='radio'
-						value='men'
-						{...register('gender', { required: true })}
-						onClick={() => handleGenerateImage('men', setUserImage)}
-					/>
-					Hombre
-				</label>
-				<label>
-					<input
-						type='radio'
-						value='women'
-						{...register('gender', { required: true })}
-						onClick={() => handleGenerateImage('women', setUserImage)}
-					/>
-					Mujer
-				</label>
+				<InputFile setUserImage={setUserImage}/>
 
-				<StyledImg src={userImage} alt='user img' />
 				<div>
 					<label>
 						Active:
@@ -102,35 +81,11 @@ const FormCreateUser = () => {
 	);
 };
 
-const createUser = async (data, userImage) => {
-	const newUser = {
-		password: data.password,
-		name: data.name,
-		email: data.email,
-		username: data.username,
-		active: data.isActive,
-		image: userImage
-	};
-
-	try {
-		const newUsers = await postData(URLS.AUTH_REGISTER, newUser);
-		return newUsers;
-	} catch (error) {
-		console.error('Error al crear el usuario:', error);
-	}
-};
-
-//* genero imagen aleatoria del usuario a partir de su género
-const handleGenerateImage = (gender, setUserImage) => {
-	const imageUrl = generateRandomImage(gender);
-	setUserImage(imageUrl);
-};
-
 const formSubmit = async (data, userImage, navigate, setUsers) => {
-	const userData = { data, userImage };
-	const user = await registerRequest(userData);
+	const userData = { ...data, userImage };
+	const users = await registerRequest({ ...userData });
 
-	setUsers(user);
+	setUsers(users);
 	navigate('/');
 };
 

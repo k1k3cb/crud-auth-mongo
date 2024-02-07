@@ -14,8 +14,8 @@ const StyledModal = styled.div`
 `;
 
 const StyledModalContent = styled.div`
-	width: 400px;
-	height: 400px;
+	width: 600px;
+	height: 600px;
 	background-color: #333;
 `;
 

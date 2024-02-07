@@ -43,7 +43,7 @@ authController.login = async (req, res) => {
 };
 
 authController.register = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { name, email, username, password, active, image } = req.body;
 
   try {
     // Generar un hash de la contraseña
@@ -51,8 +51,11 @@ authController.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = new UserModel({
-      username,
+      name,
       email,
+      username,
+      active,
+      image,
       password: hashedPassword // Guarda la contraseña encriptada en la base de datos
     });
 

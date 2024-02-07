@@ -32,3 +32,10 @@ export const deleteData = async (url, body = {}) => {
 	});
 	return data;
 };
+export const uploadData = async (url, body = {}) => {
+	const data = await fetchData(url, {
+		method: METHODS.POST,
+		body
+	});
+	return data;
+};
