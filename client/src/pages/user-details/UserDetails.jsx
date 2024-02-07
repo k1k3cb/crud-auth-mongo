@@ -1,5 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import DeleteConfirmation from '../../components/delete-confirmation/DeleteConfirmation';
+import FormEditUser from '../../components/form-edit-user/FormEditUser';
+import Modal from '../../components/modal/Modal';
 import { URLS } from '../../constants/urls';
 import { UsersContext } from '../../context/UsersContext';
 import { deleteData } from '../../utils/api/api';
@@ -9,6 +12,7 @@ const UserDetails = () => {
 	const { users, setUsers } = useContext(UsersContext);
 	const currentUser = users.find(user => user._id === id);
 	const navigate = useNavigate();
+	const [content, setContent] = useState();
 
 	if (!currentUser) {
 		return (
@@ -21,7 +25,7 @@ const UserDetails = () => {
 		);
 	}
 
-	const { name, username, email, active,  image } = currentUser;
+	const { name, username, email, active, image } = currentUser;
 	return (
 		<div>
 			<Link to={'/'}>
@@ -34,10 +38,26 @@ const UserDetails = () => {
 				<p>Email: {email}</p>
 				<p>Usuario {active ? 'activo' : 'inactivo'}</p>
 			</div>
-			<Link to={`/edit-user/${id}`}>
-				<button type='button'>Editar</button>
-			</Link>
-			<button onClick={() => deleteUser(id, navigate, setUsers)}>Borrar</button>
+
+			<button type='button' onClick={() => setContent(<FormEditUser />)}>
+				Editar
+			</button>
+
+			{/* <button onClick={() => deleteUser(id, navigate, setUsers)}>Borrar</button> */}
+
+			<button
+				onClick={() =>
+					setContent(
+						<DeleteConfirmation
+							confirmDeleteUser={() => deleteUser(id, navigate, setUsers)}
+							closeModal={() => setContent()}
+						/>
+					)
+				}
+			>
+				Borrar desde modal
+			</button>
+			<Modal closeModal={() => setContent()}>{content}</Modal>
 		</div>
 	);
 };
@@ -45,7 +65,7 @@ const UserDetails = () => {
 const deleteUser = async (id, navigate, setUsers) => {
 	try {
 		const usersUpdated = await deleteData(`${URLS.API_USERS}/${id}`);
-		console.log('usersUpdated', usersUpdated);
+
 		setUsers(usersUpdated);
 		navigate('/');
 	} catch (error) {

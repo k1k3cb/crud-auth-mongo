@@ -1,11 +1,13 @@
 import { useContext, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { URLS } from '../../constants/urls';
 import { UsersContext } from '../../context/UsersContext';
 import { postData } from '../../utils/api/api';
+import { registerRequest } from '../../utils/api/auth.api';
 import { generateRandomImage } from '../../utils/generateRandomImage';
+import { StyledImg } from './styles';
 
 const FormCreateUser = () => {
 	const [userImage, setUserImage] = useState('/assets/images/profile.png');
@@ -21,9 +23,6 @@ const FormCreateUser = () => {
 	return (
 		<div>
 			<h2>Create User Form</h2>
-			<Link to={'/'}>
-				<button type='button'>Home</button>
-			</Link>
 
 			<form
 				onSubmit={handleSubmit(data =>
@@ -85,7 +84,7 @@ const FormCreateUser = () => {
 					Mujer
 				</label>
 
-				<img src={userImage} alt='user img' />
+				<StyledImg src={userImage} alt='user img' />
 				<div>
 					<label>
 						Active:
@@ -104,7 +103,6 @@ const FormCreateUser = () => {
 };
 
 const createUser = async (data, userImage) => {
-	console.log('data', data);
 	const newUser = {
 		password: data.password,
 		name: data.name,
@@ -113,9 +111,9 @@ const createUser = async (data, userImage) => {
 		active: data.isActive,
 		image: userImage
 	};
-	console.log('userData', newUser);
+
 	try {
-		const newUsers = await postData(URLS.API_USERS, newUser);
+		const newUsers = await postData(URLS.AUTH_REGISTER, newUser);
 		return newUsers;
 	} catch (error) {
 		console.error('Error al crear el usuario:', error);
@@ -129,7 +127,8 @@ const handleGenerateImage = (gender, setUserImage) => {
 };
 
 const formSubmit = async (data, userImage, navigate, setUsers) => {
-	const user = await createUser(data, userImage);
+	const userData = { data, userImage };
+	const user = await registerRequest(userData);
 
 	setUsers(user);
 	navigate('/');

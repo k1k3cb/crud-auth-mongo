@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import UserCard from '../../components/user-card/UserCard';
 import { USER_FILTERS } from '../../constants/users-filter';
 import { UsersContext } from '../../context/UsersContext';
@@ -9,7 +9,6 @@ const Home = () => {
 	const { filter } = useContext(FilterContext);
 	const { users, loading } = useContext(UsersContext);
 
-
 	if (loading && !users) return <h2>LOADING...</h2>;
 
 	const currentUsers = filterUsers(users, filter);
@@ -18,7 +17,6 @@ const Home = () => {
 		<StyledContainer>
 			{currentUsers &&
 				currentUsers.map(user => {
-					console.log(user);
 					return (
 						<UserCard
 							key={user._id}

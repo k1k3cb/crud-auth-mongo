@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { URLS } from '../../constants/urls';
 import { UsersContext } from '../../context/UsersContext';
 import { patchData } from '../../utils/api/api';
@@ -22,9 +22,6 @@ const FormEditUser = () => {
 	return (
 		<div>
 			<h2>Edit User Form</h2>
-			<Link to={'/'}>
-				<button type='button'>Home</button>
-			</Link>
 
 			<form onSubmit={handleSubmit(data => formSubmit(data, userImage, id))}>
 				<div>
@@ -97,7 +94,6 @@ const FormEditUser = () => {
 };
 
 const updateUser = async (data, userImage, id) => {
-	console.log('data', data);
 	const updatedUser = {
 		id,
 		name: data.name,
@@ -106,13 +102,13 @@ const updateUser = async (data, userImage, id) => {
 		active: data.isActive,
 		image: userImage
 	};
-	console.log('updatedUser', updatedUser);
 
 	try {
 		const updatedUsers = await patchData(
 			`${URLS.API_USERS}/${id}`,
 			updatedUser
 		);
+		return updatedUsers;
 	} catch (error) {
 		console.error('Error al crear el usuario:', error);
 	}

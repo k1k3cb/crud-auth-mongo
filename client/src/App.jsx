@@ -1,4 +1,5 @@
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './providers/Auth.provider';
 import { FilterProvider } from './providers/FIlter.provider';
 import { UsersProvider } from './providers/Users.provider';
 import Router from './router/Router';
@@ -9,11 +10,13 @@ const App = () => {
 		<>
 			<GlobalStyles />
 			<UsersProvider>
-				<FilterProvider>
-					<BrowserRouter>
-						<Router />
-					</BrowserRouter>
-				</FilterProvider>
+				<AuthProvider>
+					<FilterProvider>
+						<BrowserRouter>
+							<Router />
+						</BrowserRouter>
+					</FilterProvider>
+				</AuthProvider>
 			</UsersProvider>
 		</>
 	);

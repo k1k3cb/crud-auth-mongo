@@ -1,12 +1,14 @@
+import Cookies from 'js-cookie';
 import { HEADERS } from '../../constants/headers';
 import { URLS } from '../../constants/urls';
 
-export const registerRequest = async user => {
+export const registerRequest = async body => {
 	try {
 		const response = await fetch(URLS.AUTH_REGISTER, {
 			method: 'POST',
 			headers: HEADERS,
-			body: JSON.stringify(user)
+			body: JSON.stringify(body),
+			credentials: 'include' // Esto es equivalente a withCredentials en Axios
 		});
 
 		if (!response.ok) {
@@ -21,12 +23,12 @@ export const registerRequest = async user => {
 	}
 };
 
-export const loginRequest = async (user, setUserData) => {
+export const loginRequest = async (body, setData) => {
 	try {
 		const response = await fetch(URLS.AUTH_LOGIN, {
 			method: 'POST',
 			headers: HEADERS,
-			body: JSON.stringify(user),
+			body: JSON.stringify(body),
 			credentials: 'include'
 		});
 
@@ -35,7 +37,7 @@ export const loginRequest = async (user, setUserData) => {
 		}
 
 		const data = await response.json();
-		setUserData(data);
+		setData(data);
 	} catch (error) {
 		console.error('Error en la solicitud de inicio de sesión:', error);
 		throw error;
@@ -60,4 +62,32 @@ export const verifyTokenRequest = async () => {
 		console.error('Error en la verificación del token:', error);
 		throw error;
 	}
+};
+
+export const checkLogin = async (setData, setLoading) => {
+	const cookies = Cookies.get();
+	if (!cookies.token) {
+		setLoading(false);
+		return;
+	}
+
+	try {
+		const response = await verifyTokenRequest(cookies.token);
+
+		if (!response) {
+			setLoading(false);
+			return;
+		}
+
+		setData(response);
+		setLoading(false);
+	} catch (error) {
+		setLoading(false);
+	}
+};
+
+export const logoutUser = (setData, navigate) => {
+	Cookies.remove('token');
+	setData(null);
+	navigate('/');
 };

@@ -43,7 +43,7 @@ const handleByOption = (event, setFilter) => {
 	const selectedValue = Number(event.target.value);
 	setFilter(selectedValue);
 
-	// console.log(selectedValue)
+	
 };
 
 export default UserFilterAside;

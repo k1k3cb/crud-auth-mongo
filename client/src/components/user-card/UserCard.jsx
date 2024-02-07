@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { StyledCard } from './styles';
 
 const UserCard = ({ id, image, name, username, email, estatus }) => {
-
 	return (
 		<StyledCard>
 			<img src={image} alt={`${name} image`} />

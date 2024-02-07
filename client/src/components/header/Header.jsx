@@ -1,14 +1,19 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import FormCreateUser from '../form-create-user/FormCreateUser';
+import Modal from '../modal/Modal';
 import { StyledHeader } from './styles';
 
 const Header = () => {
+	const [content, setContent] = useState();
+
 	return (
 		<StyledHeader>
 			<p>User:Current User</p>
-			<Link to='/register-user'>
+			<button onClick={() => setContent(<FormCreateUser />)}>
 				{' '}
-				<button type='button'> Crear Usuario</button>{' '}
-			</Link>
+				Crear usuario desde modal
+			</button>{' '}
+			<Modal closeModal={() => setContent()}>{content}</Modal>
 		</StyledHeader>
 	);
 };

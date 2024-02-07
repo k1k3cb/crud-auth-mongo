@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import UserFilterAside from '../user-filter-aside/UserFilterAside';
 import { StyledAside, StyledButtons, StyledFilters } from './styles';
 
@@ -5,10 +6,12 @@ const SideBar = () => {
 	return (
 		<StyledAside>
 			<StyledFilters>
-				<UserFilterAside  />
+				<UserFilterAside />
 			</StyledFilters>
 			<StyledButtons>
-				<button>LOGIN</button>
+				<Link to={'/login'}>
+					<button>LOGIN</button>
+				</Link>
 				<button>LOGOUT</button>
 			</StyledButtons>
 		</StyledAside>
