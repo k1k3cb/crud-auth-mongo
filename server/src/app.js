@@ -8,6 +8,7 @@ const { corsOptions } = require('./config/cors.config');
 const userRoutes = require('./routes/user.routes');
 const { databaseConnect } = require('./database/database');
 const authRoutes = require('./routes/auth.routes');
+const fileupload = require('express-fileupload')
 require('dotenv').config();
 
 // Rutas
@@ -17,6 +18,7 @@ require('dotenv').config();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.use(fileupload());
 
 // Opciones avanzadas de configuración de CORS
 app.use(cors(corsOptions));

@@ -18,7 +18,7 @@ const InputFile = ({ setUserImage }) => {
 				id='file-input'
 				name='photo'
 				accept='image/*'
-				onChange={event => uploadFile(event, setPreview, setUserImage)}
+				onChange={event => uploadFile(event, setPreview)}
 			/>
 		</>
 	);

@@ -7,7 +7,7 @@ import { registerRequest } from '../../utils/api/auth.api';
 import InputFile from '../input-file/InputFile';
 
 const FormCreateUser = () => {
-	const [userImage, setUserImage] = useState('');
+	const [userImage, setUserImage] = useState();
 	const { setUsers } = useContext(UsersContext);
 	const {
 		handleSubmit,
@@ -62,7 +62,7 @@ const FormCreateUser = () => {
 						{...register('username', { required: true })}
 					/>
 				</div>
-				<InputFile setUserImage={setUserImage}/>
+				<InputFile setUserImage={setUserImage} />
 
 				<div>
 					<label>

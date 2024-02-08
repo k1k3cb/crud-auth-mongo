@@ -17,4 +17,7 @@ userRoutes.patch('/:id', userController.updateUser);
 // Eliminar un usuario
 userRoutes.delete('/:id', userController.deleteUser);
 
+// Subir imagen
+userRoutes.post('/upload', userController.uploadImage);
+
 module.exports = userRoutes;
